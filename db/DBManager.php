@@ -141,7 +141,6 @@ class DBManager
                 $pre = ($i > 0) ? ', ' : '';
                 $val = htmlspecialchars(strip_tags($val));
                 $colvalSet .= $pre . $key . "='" . $val . "'";
-//                &nnbsp;
                 $i++;
             }
             if (!empty($conditions) && is_array($conditions)) {

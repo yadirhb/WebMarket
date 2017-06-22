@@ -1,0 +1,171 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Web Market</title>
+    <meta name="description" content="Web Market">
+    <meta name="author" content="yadirhb@gmail.com">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <link rel="stylesheet" href="view/css/styles.css"/>
+
+    <script src="./view/js/angular/webMarketModule.js"></script>
+</head>
+<body ng-app="webMarket">
+<div class="container" ng-controller="productController" ng-init="getRecords()">
+    <div class="row">
+        <div class="panel panel-default products-content">
+            <div class="panel-heading">Mercadoria <a href="javascript:void(0);" class="glyphicon glyphicon-plus"
+                                                     onclick="$('.formData').slideToggle();"></a></div>
+            <div class="alert alert-danger none"><p></p></div>
+            <div class="alert alert-success none"><p></p></div>
+            <div class="panel-body none formData">
+                <form name="productForm" class="form-horizontal" ng-submit="submitForm(productForm.$valid)" novalidate>
+                    <!-- CODE -->
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : productForm.code.$invalid && !productForm.code.$pristine }">
+                        <label class="col-xs-3 control-label">Código da Mercadoria</label>
+                        <div class="col-xs-5">
+                            <input type="text" class="form-control" name="code" ng-model="tempProductData.code"
+                                   ng-minlength="3" ng-maxlength="30" required/>
+                            <p ng-show="productForm.code.$invalid && !productForm.code.$pristine" class="help-block">The
+                                code
+                                is required.</p>
+                            <p ng-show="productForm.code.$error.minlength" class="help-block">Code is too short.</p>
+                            <p ng-show="productForm.code.$error.maxlength" class="help-block">Code is too long.</p>
+                        </div>
+                    </div>
+
+                    <!-- TYPE -->
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : productForm.type.$invalid && !productForm.type.$pristine }">
+                        <label class="col-xs-3 control-label">Tipo da Mercadoria</label>
+                        <div class="col-xs-5">
+                            <input type="text" class="form-control" name="type" ng-model="tempProductData.type"
+                                   required/>
+                            <p ng-show="productForm.type.$invalid && !productForm.type.$pristine" class="help-block">The
+                                type
+                                is required.</p>
+                        </div>
+                    </div>
+
+                    <!-- NAME -->
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : productForm.name.$invalid && !productForm.name.$pristine }">
+                        <label class="col-xs-3 control-label">Nome da Mercadoria</label>
+                        <div class="col-xs-5">
+                            <input type="text" class="form-control" name="name" ng-model="tempProductData.name"
+                                   required/>
+                            <p ng-show="productForm.name.$invalid && !productForm.name.$pristine" class="help-block">The
+                                name
+                                is required.</p>
+                        </div>
+                    </div>
+
+                    <!-- AMOUNT -->
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : productForm.amount.$invalid && !productForm.amount.$pristine }">
+                        <label class="col-xs-3 control-label">Quantidade</label>
+                        <div class="col-xs-3 inputGroupContainer">
+                            <div class="input-group">
+                                <input type="number" min="1" class="form-control" name="amount"
+                                       ng-model="tempProductData.amount" required/>
+                                <p ng-show="productForm.amount.$invalid && !productForm.amount.$pristine"
+                                   class="help-block">
+                                    The amount is required.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PRICE -->
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : productForm.price.$invalid && !productForm.price.$pristine }">
+                        <label class="col-xs-3 control-label">Preço</label>
+                        <div class="col-xs-3 inputGroupContainer">
+                            <div class="input-group">
+                                <input type="number" step="0.01" class="form-control" name="price"
+                                       ng-model="tempProductData.price" required/>
+                                <span class="input-group-addon">$</span>
+                                <p ng-show="productForm.price.$invalid && !productForm.price.$pristine"
+                                   class="help-block">The
+                                    type
+                                    is required.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DESTINATION -->
+                    <div class="form-group"
+                         ng-class="{ 'has-error' : productForm.destination.$invalid && !productForm.destination.$pristine }">
+                        <label class="col-xs-3 control-label">Tipo do Negocio</label>
+                        <div class="col-xs-5 selectContainer">
+                            <select class="form-control" name="destination" ng-model="tempProductData.destination"
+                                    required>
+                                <option value="0" selected>Venda</option>
+                                <option value="1">Compra</option>
+                            </select>
+                            <p ng-show="productForm.destination.$invalid && !productForm.destination.$pristine"
+                               class="help-block">The type
+                                is required.</p>
+                        </div>
+                    </div>
+
+                    <!-- BUTTONS -->
+                    <div class="form-group">
+                        <div class="col-xs-5 col-xs-offset-3">
+                            <a href="javascript:void(0);" class="btn btn-warning"
+                               onclick="$('.formData').slideUp();">Cancelar</a>
+                            <!-- SUBMIT BUTTON -->
+                            <button type="submit" class="btn btn-success" ng-hide="tempProductData.id"
+                                    ng-disabled="productForm.$invalid" ng-model="addButton" ng-click="addButton=true">
+                                Adicionar
+                                Mercadoria
+                            </button>
+                            <!-- SUBMIT BUTTON -->
+                            <button type="submit" class="btn btn-success" ng-hide="!tempProductData.id"
+                                    ng-disabled="productForm.$invalid" ng-model="updateButton"
+                                    ng-click="updateButton=true">Atualizar
+                                Mercadoria
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <table class="table table-striped">
+                <tr>
+                    <th width="5%">#</th>
+                    <th width="15%">Código da Mercadoria</th>
+                    <th width="10%">Tipo da Mercadoria</th>
+                    <th width="20%">Nome da Mercadoria</th>
+                    <th width="10%">Quantidade</th>
+                    <th width="5%">Preço</th>
+                    <th width="10%">Tipo do Negocio</th>
+                    <th width="15%">Created</th>
+                    <th width="10%"></th>
+                </tr>
+                <tr ng-repeat="product in products | orderBy:'-created'">
+                    <td>{{$index + 1}}</td>
+                    <td>{{product.code}}</td>
+                    <td>{{product.type}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.amount}}</td>
+                    <td>{{product.price}}</td>
+                    <td>{{product.destination == 0 ? "Venda" : "Compra"}}</td>
+                    <td>{{product.created}}</td>
+                    <td>
+                        <a href="javascript:void(0);" class="glyphicon glyphicon-edit"
+                           ng-click="editProduct(product)"></a>
+                        <a href="javascript:void(0);" class="glyphicon glyphicon-trash"
+                           ng-click="deleteProduct(product)"></a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+</html>
