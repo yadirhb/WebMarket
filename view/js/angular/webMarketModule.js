@@ -75,8 +75,8 @@ angular.module("webMarket", [])
                         product.code = $scope.tempProductData.code;
                         product.type = $scope.tempProductData.type;
                         product.name = $scope.tempProductData.name;
-                        product.amount = $scope.tempProductData.amount;
-                        product.price = $scope.tempProductData.price;
+                        product.amount = parseInt($scope.tempProductData.amount);
+                        product.price = parseFloat($scope.tempProductData.price);
                         product.destination = $scope.tempProductData.destination;
                         product.created = $scope.tempProductData.created;
                     } else {
@@ -85,12 +85,11 @@ angular.module("webMarket", [])
                             code: response.data.code,
                             type: response.data.type,
                             name: response.data.name,
-                            amount: response.data.amount,
-                            price: response.data.price,
+                            amount: parseInt(response.data.amount),
+                            price: parseFloat(response.data.price),
                             destination: response.data.destination,
                             created: response.data.created
                         });
-
                     }
                     $scope.productForm.$setPristine();
                     $scope.tempProductData = {};
@@ -114,8 +113,8 @@ angular.module("webMarket", [])
                 code: product.code,
                 type: product.type,
                 name: product.name,
-                amount: product.amount,
-                price: product.price,
+                amount: parseInt(product.amount),
+                price: parseFloat(product.price),
                 destination: product.destination,
                 created: product.created
             };
